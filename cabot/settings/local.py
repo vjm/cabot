@@ -6,7 +6,7 @@ from cabot.celeryconfig import *
 from cabot.cabot_config import *
 
 settings_dir = os.path.dirname(__file__)
-PROJECT_ROOT = os.path.abspath(settings_dir, '..')
+PROJECT_ROOT = os.path.abspath(os.path.join(settings_dir, '..'))
 
 TEMPLATE_DEBUG = DEBUG = os.environ.get("DEBUG", False)
 
