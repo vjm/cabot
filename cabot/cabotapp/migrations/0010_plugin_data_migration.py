@@ -20,32 +20,32 @@ class Migration(DataMigration):
         #
         #  Create plugin instances for old alerts
         #
-        try:
-            hipchat_alert = orm['cabot_alert_hipchat.HipchatAlert'].objects.get(title="Hipchat")
-        except:
-            hipchat_alert = orm['cabot_alert_hipchat.HipchatAlert'](
-                title = "Hipchat",
-                polymorphic_ctype = orm['contenttypes.contenttype'].objects.get(model='hipchatalert'),
-                )
-            hipchat_alert.save()
+        # try:
+        #     hipchat_alert = orm['cabot_alert_hipchat.HipchatAlert'].objects.get(title="Hipchat")
+        # except:
+        #     hipchat_alert = orm['cabot_alert_hipchat.HipchatAlert'](
+        #         title = "Hipchat",
+        #         polymorphic_ctype = orm['contenttypes.contenttype'].objects.get(model='hipchatalert'),
+        #         )
+        #     hipchat_alert.save()
 
-        try:
-            twilio_phone_alert = orm['cabot_alert_twilio.TwilioPhoneCall'].objects.get(title="Twilio Phone Call")
-        except:
-            twilio_phone_alert = orm['cabot_alert_twilio.TwilioPhoneCall'](
-                title = "Twilio Phone Call",
-                polymorphic_ctype = orm['contenttypes.contenttype'].objects.get(model='twiliophonecall'),
-                )
-            twilio_phone_alert.save()
+        # try:
+        #     twilio_phone_alert = orm['cabot_alert_twilio.TwilioPhoneCall'].objects.get(title="Twilio Phone Call")
+        # except:
+        #     twilio_phone_alert = orm['cabot_alert_twilio.TwilioPhoneCall'](
+        #         title = "Twilio Phone Call",
+        #         polymorphic_ctype = orm['contenttypes.contenttype'].objects.get(model='twiliophonecall'),
+        #         )
+        #     twilio_phone_alert.save()
 
-        try:
-            twilio_sms_alert = orm['cabot_alert_twilio.TwilioSMS'].objects.get(title="Twilio SMS")
-        except:
-            twilio_sms_alert = orm['cabot_alert_twilio.TwilioSMS'](
-                title = "Twilio SMS",
-                polymorphic_ctype = orm['contenttypes.contenttype'].objects.get(model='twiliosms'),
-                )
-            twilio_sms_alert.save()
+        # try:
+        #     twilio_sms_alert = orm['cabot_alert_twilio.TwilioSMS'].objects.get(title="Twilio SMS")
+        # except:
+        #     twilio_sms_alert = orm['cabot_alert_twilio.TwilioSMS'](
+        #         title = "Twilio SMS",
+        #         polymorphic_ctype = orm['contenttypes.contenttype'].objects.get(model='twiliosms'),
+        #         )
+        #     twilio_sms_alert.save()
         try:
             email_alert = orm['cabot_alert_email.EmailAlert'].objects.get(title="Email")
         except:
@@ -59,12 +59,12 @@ class Migration(DataMigration):
         #  Attach new alert instances to the services!
         #
         for service in orm.Service.objects.all():
-            if service.hipchat_alert:
-                service.alerts.add(hipchat_alert)
-            if service.sms_alert:
-                service.alerts.add(twilio_sms_alert)
-            if service.telephone_alert:
-                service.alerts.add(twilio_phone_alert)
+            # if service.hipchat_alert:
+            #     service.alerts.add(hipchat_alert)
+            # if service.sms_alert:
+            #     service.alerts.add(twilio_sms_alert)
+            # if service.telephone_alert:
+            #     service.alerts.add(twilio_phone_alert)
             if service.email_alert:
                 service.alerts.add(email_alert)
             service.save()
@@ -72,22 +72,22 @@ class Migration(DataMigration):
         #
         #  Transfer the user data
         #
-        for profile in orm.UserProfile.objects.all():
-            hipchat_alias = orm['cabot_alert_hipchat.hipchatalertuserdata'](
-                title = "Hipchat Plugin",
-                hipchat_alias = profile.hipchat_alias,
-                polymorphic_ctype = orm['contenttypes.contenttype'].objects.get(model='hipchatalertuserdata'),
-                user = profile,
-                )
-            hipchat_alias.save()
+        # for profile in orm.UserProfile.objects.all():
+            # hipchat_alias = orm['cabot_alert_hipchat.hipchatalertuserdata'](
+            #     title = "Hipchat Plugin",
+            #     hipchat_alias = profile.hipchat_alias,
+            #     polymorphic_ctype = orm['contenttypes.contenttype'].objects.get(model='hipchatalertuserdata'),
+            #     user = profile,
+            #     )
+            # hipchat_alias.save()
 
-            twilio_phone_number = orm['cabot_alert_twilio.twiliouserdata'](
-                title = "Twilio Plugin",
-                phone_number = profile.mobile_number,
-                polymorphic_ctype = orm['contenttypes.contenttype'].objects.get(model='twiliouserdata'),
-                user = profile,
-                )
-            twilio_phone_number.save()
+            # twilio_phone_number = orm['cabot_alert_twilio.twiliouserdata'](
+            #     title = "Twilio Plugin",
+            #     phone_number = profile.mobile_number,
+            #     polymorphic_ctype = orm['contenttypes.contenttype'].objects.get(model='twiliouserdata'),
+            #     user = profile,
+            #     )
+            # twilio_phone_number.save()
 
     def backwards(self, orm):
         "Write your backwards methods here."
@@ -126,27 +126,27 @@ class Migration(DataMigration):
             'Meta': {'object_name': 'EmailAlert', '_ormbases': [u'cabotapp.AlertPlugin']},
             u'alertplugin_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['cabotapp.AlertPlugin']", 'unique': 'True', 'primary_key': 'True'})
         },
-        u'cabot_alert_hipchat.hipchatalert': {
-            'Meta': {'object_name': 'HipchatAlert', '_ormbases': [u'cabotapp.AlertPlugin']},
-            u'alertplugin_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['cabotapp.AlertPlugin']", 'unique': 'True', 'primary_key': 'True'})
-        },
-        u'cabot_alert_hipchat.hipchatalertuserdata': {
-            'Meta': {'object_name': 'HipchatAlertUserData', '_ormbases': [u'cabotapp.AlertPluginUserData']},
-            u'alertpluginuserdata_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['cabotapp.AlertPluginUserData']", 'unique': 'True', 'primary_key': 'True'}),
-            'hipchat_alias': ('django.db.models.fields.CharField', [], {'max_length': '50', 'blank': 'True'})
-        },
-        u'cabot_alert_twilio.twiliophonecall': {
-            'Meta': {'object_name': 'TwilioPhoneCall', '_ormbases': [u'cabotapp.AlertPlugin']},
-            u'alertplugin_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['cabotapp.AlertPlugin']", 'unique': 'True', 'primary_key': 'True'})
-        },
-        u'cabot_alert_twilio.twiliosms': {
-            'Meta': {'object_name': 'TwilioSMS', '_ormbases': [u'cabotapp.AlertPlugin']},
-            u'alertplugin_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['cabotapp.AlertPlugin']", 'unique': 'True', 'primary_key': 'True'})
-        },
-        u'cabot_alert_twilio.twiliouserdata': {
-            'Meta': {'object_name': 'TwilioUserData', '_ormbases': [u'cabotapp.AlertPluginUserData']},
-            u'alertpluginuserdata_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['cabotapp.AlertPluginUserData']", 'unique': 'True', 'primary_key': 'True'}),
-            'phone_number': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'})
+        # u'cabot_alert_hipchat.hipchatalert': {
+        #     'Meta': {'object_name': 'HipchatAlert', '_ormbases': [u'cabotapp.AlertPlugin']},
+        #     u'alertplugin_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['cabotapp.AlertPlugin']", 'unique': 'True', 'primary_key': 'True'})
+        # },
+        # u'cabot_alert_hipchat.hipchatalertuserdata': {
+        #     'Meta': {'object_name': 'HipchatAlertUserData', '_ormbases': [u'cabotapp.AlertPluginUserData']},
+        #     u'alertpluginuserdata_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['cabotapp.AlertPluginUserData']", 'unique': 'True', 'primary_key': 'True'}),
+        #     'hipchat_alias': ('django.db.models.fields.CharField', [], {'max_length': '50', 'blank': 'True'})
+        # },
+        # u'cabot_alert_twilio.twiliophonecall': {
+        #     'Meta': {'object_name': 'TwilioPhoneCall', '_ormbases': [u'cabotapp.AlertPlugin']},
+        #     u'alertplugin_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['cabotapp.AlertPlugin']", 'unique': 'True', 'primary_key': 'True'})
+        # },
+        # u'cabot_alert_twilio.twiliosms': {
+        #     'Meta': {'object_name': 'TwilioSMS', '_ormbases': [u'cabotapp.AlertPlugin']},
+        #     u'alertplugin_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['cabotapp.AlertPlugin']", 'unique': 'True', 'primary_key': 'True'})
+        # },
+        # u'cabot_alert_twilio.twiliouserdata': {
+        #     'Meta': {'object_name': 'TwilioUserData', '_ormbases': [u'cabotapp.AlertPluginUserData']},
+        #     u'alertpluginuserdata_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['cabotapp.AlertPluginUserData']", 'unique': 'True', 'primary_key': 'True'}),
+        #     'phone_number': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'})
         },
         u'cabotapp.alertplugin': {
             'Meta': {'object_name': 'AlertPlugin'},
@@ -169,7 +169,7 @@ class Migration(DataMigration):
             'alerts_enabled': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'email_alert': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'hackpad_id': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
-            'hipchat_alert': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            # 'hipchat_alert': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'last_alert_sent': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'name': ('django.db.models.fields.TextField', [], {}),
@@ -197,7 +197,7 @@ class Migration(DataMigration):
             'alerts_enabled': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'email_alert': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'hackpad_id': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
-            'hipchat_alert': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            # 'hipchat_alert': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'instances': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['cabotapp.Instance']", 'symmetrical': 'False', 'blank': 'True'}),
             'last_alert_sent': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
@@ -270,7 +270,7 @@ class Migration(DataMigration):
         u'cabotapp.userprofile': {
             'Meta': {'object_name': 'UserProfile'},
             'fallback_alert_user': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'hipchat_alias': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '50', 'blank': 'True'}),
+            # 'hipchat_alias': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '50', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'mobile_number': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '20', 'blank': 'True'}),
             'user': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "'profile'", 'unique': 'True', 'to': u"orm['auth.User']"})
@@ -284,5 +284,6 @@ class Migration(DataMigration):
         }
     }
 
-    complete_apps = ['cabot_alert_hipchat', 'cabot_alert_email', 'cabot_alert_twilio', 'cabotapp']
+    # complete_apps = ['cabot_alert_hipchat', 'cabot_alert_email', 'cabot_alert_twilio', 'cabotapp']
+    complete_apps = ['cabot_alert_email', 'cabotapp']
     # symmetrical = True
