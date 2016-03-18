@@ -147,7 +147,7 @@ class Migration(DataMigration):
         #     'Meta': {'object_name': 'TwilioUserData', '_ormbases': [u'cabotapp.AlertPluginUserData']},
         #     u'alertpluginuserdata_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['cabotapp.AlertPluginUserData']", 'unique': 'True', 'primary_key': 'True'}),
         #     'phone_number': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'})
-        },
+        # },
         u'cabotapp.alertplugin': {
             'Meta': {'object_name': 'AlertPlugin'},
             'enabled': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
